@@ -74,6 +74,7 @@ class messagesModel(models.Model):
     mId = models.AutoField(primary_key=True)
     message = models.CharField(max_length=500)
     userId = models.ForeignKey('userModel', on_delete=models.CASCADE)
+    userName = models.CharField(max_length=500)
     catId = models.ForeignKey('categoryModel', on_delete=models.CASCADE)
     last_modified = models.DateTimeField(auto_now_add=True)
 

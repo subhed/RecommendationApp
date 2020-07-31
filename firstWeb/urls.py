@@ -50,6 +50,8 @@ urlpatterns = [
     path('home/', wallPageView, name='Home'),
     path('logout/', logout, name='Home'),
     path('chat/', views.chatIndex, name='Chat Index'),
-    path('chat/<str:room_name>/', views.room, name='room'),
+    path('chat/<str:room_name>/', views.room, name='Room'),
+    path('getMessage/', views.getMessage, name='Messages'),
+    path('getCategory/', views.chatRooms, name='Category'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

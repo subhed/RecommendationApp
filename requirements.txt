@@ -1,1 +1,5 @@
-
+django
+channels
+Pillow
+django-redis
+channels-redis

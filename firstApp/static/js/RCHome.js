@@ -85,6 +85,16 @@ $(document).ready(function() {
     });
 
 
+    $.getJSON("http://localhost:8000/getCategory/", function(result) {
+
+        var obj = JSON.parse(result);
+        for (var cat in obj) {
+
+            $('#chatGroup').append('<a href="/chat/' + obj[cat].fields.category + '/"><div class="btn btn-default w-100">' + obj[cat].fields.category + '</div></a>');
+
+        }
+    });
+
 });
 
 $(document).on('click', '.cmt-post', function() {

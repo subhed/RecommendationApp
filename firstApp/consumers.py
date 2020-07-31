@@ -18,26 +18,9 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        async_to_sync(self.channel_layer.group_send)(
-                    self.room_group_name,
-                    {
-                        'type': 'chat_message',
-                        'message': 'Welcome to Live Chat'
-                    })
+
         self.accept()
                 
-        # entries_check = categoryModel.objects.filter(category=self.scope['url_route']['kwargs']['room_name']).count()
-        # if entries_check > 0:
-        #     cat_id = categoryModel.objects.filter(category=self.scope['url_route']['kwargs']['room_name'])[0].catId
-        #     entries = messagesModel.objects.filter(catId=cat_id)
-        #     print(entries)
-        #     for x in entries:
-        #         async_to_sync(self.channel_layer.group_send)(
-        #             self.room_group_name,
-        #             {
-        #                 'type': 'chat_message',
-        #                 'message': x.message
-        #             })
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
@@ -57,13 +40,14 @@ class ChatConsumer(WebsocketConsumer):
             cat_id = categoryModel.objects.filter(category=self.scope['url_route']['kwargs']['room_name'])[0]
             print('Checks')
             print(user1)
-            msgInstance = messagesModel.objects.create(message=message, catId=cat_id, userId=user1)
+            msgInstance = messagesModel.objects.create(message=message, catId=cat_id, userId=user1, userName=user1.f_name)
 
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message
+                'message': message,
+                'userId': user1.f_name
             }
         )
     
@@ -72,7 +56,11 @@ class ChatConsumer(WebsocketConsumer):
 
     def chat_message(self, event):
         message = event['message']
+        userId = event['userId']
+
         self.send(text_data=json.dumps({
-            'message':message
+            'message':message,
+            'userId': userId
+
         }))
 

@@ -15,6 +15,7 @@ from .models import commentModel
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 from .models import categoryModel
+from .models import messagesModel
 
 
 def homePageView(request):
@@ -35,7 +36,7 @@ def wallPageView(request):
     form_param = {}
     form_param['form'] = postForm()
     user1 = userModel.objects.filter(email=session_email)
-    return render(request, 'body.html', {'name': 'ReCom Home', 'user': user1, 'form': form_param, 'posts': entries, 'comments': comments, 'category': 'All', 'catList': cat_list})
+    return render(request, 'body.html', {'name': 'ReCom Home', 'user': user1, 'form': form_param, 'posts': entries, 'comments': comments, 'category': 'General', 'catList': cat_list})
 
 
 def wallPageView_cat(request, category):
@@ -114,9 +115,9 @@ def postCheck(request):
         print("That's not an int!")
         check = 1
 
-   
     if check == 1:
-        catInstance = categoryModel.objects.create(category=request.POST['category'], posts=0)
+        catInstance = categoryModel.objects.create(
+            category=request.POST['category'], posts=0)
         catIdInt = catInstance.pk
         print('Setting')
 
@@ -124,9 +125,9 @@ def postCheck(request):
         foo_instance = postModel.objects.create(
             user_name=user1.f_name+' '+user1.l_name, user=user1, post_message=request.POST['post_message'], location=request.POST['location'], category=catIdInt)
     else:
-        print(request.FILES['image'])    
+        print(request.FILES['image'])
         foo_instance = postModel.objects.create(
-            user_name=user1.f_name+' '+user1.l_name, user=user1, post_message=request.POST['post_message'], location=request.POST['location'], category=catIdInt, image = request.FILES['image'])
+            user_name=user1.f_name+' '+user1.l_name, user=user1, post_message=request.POST['post_message'], location=request.POST['location'], category=catIdInt, image=request.FILES['image'])
 
     # if form.is_valid():
     #     print(request.GET['location'])
@@ -134,17 +135,15 @@ def postCheck(request):
     # else:
     #     print(form.errors)
     image_id = postModel.objects.get(pk=foo_instance.pk)
-    
 
     form_param = {}
     form_param['form'] = postForm()
-    
+
     if not image_id.image:
-        return JsonResponse({'postId':foo_instance.pk,'image':' '})
+        return JsonResponse({'postId': foo_instance.pk, 'image': ' '})
 
     else:
-        return JsonResponse({'postId':foo_instance.pk,'image':image_id.image.url})
-
+        return JsonResponse({'postId': foo_instance.pk, 'image': image_id.image.url})
 
 
 def commentCheck(request):
@@ -162,8 +161,9 @@ def commentCheck(request):
     form_param = {}
     form_param['form'] = postForm()
     return JsonResponse({
-        'name': user1.f_name+' '+user1.l_name, 'comment_message': request.GET['comment_message'],'cmtId': foo_instance.pk
+        'name': user1.f_name+' '+user1.l_name, 'comment_message': request.GET['comment_message'], 'cmtId': foo_instance.pk
     })
+
 
 def postDelete(request):
 
@@ -175,6 +175,7 @@ def postDelete(request):
         postModel.objects.filter(pk=request.POST['postId']).delete()
 
     return JsonResponse({})
+
 
 def commentDelete(request):
 
@@ -188,25 +189,27 @@ def commentDelete(request):
     return JsonResponse({})
 
 
-
 def commentLike(request):
 
     if request.method == 'POST':
         print(request.POST['cmtId'])
         likes_count = commentModel.objects.get(pk=request.POST['cmtId']).likes
-        cmt = commentModel.objects.filter(pk=request.POST['cmtId']).update(likes=likes_count+1)
-   
-    return JsonResponse({'newCount':likes_count+1})
+        cmt = commentModel.objects.filter(
+            pk=request.POST['cmtId']).update(likes=likes_count+1)
+
+    return JsonResponse({'newCount': likes_count+1})
 
 
 def commentDisLike(request):
 
     if request.method == 'POST':
         print(request.POST['cmtId'])
-        likes_count = commentModel.objects.get(pk=request.POST['cmtId']).dislike
-        cmt = commentModel.objects.filter(pk=request.POST['cmtId']).update(dislike=likes_count+1)
-   
-    return JsonResponse({'newCount':likes_count+1})
+        likes_count = commentModel.objects.get(
+            pk=request.POST['cmtId']).dislike
+        cmt = commentModel.objects.filter(
+            pk=request.POST['cmtId']).update(dislike=likes_count+1)
+
+    return JsonResponse({'newCount': likes_count+1})
 
 
 def loginCheck(request):
@@ -231,7 +234,7 @@ def loginCheck(request):
             return HttpResponseRedirect("/home/")
 
         else:
-            return render(request, 'login.html', {'name': 'Login','response':'not'})
+            return render(request, 'login.html', {'name': 'Login', 'response': 'not'})
     else:
         return render(request, 'login.html', {'name': 'Login'})
 
@@ -247,9 +250,32 @@ def logout(request):
 def chatIndex(request):
     return render(request, 'chat/index.html')
 
+
 def room(request, room_name):
     return render(request, 'chat/room.html', {
         'room_name': room_name,
-        'user_name' : request.session['email']
+        'user_name': request.session['email']
     })
+
+
+def getMessage(request):
+    if request.method == "POST":
+        print(request.POST['roomName'])
+        entries_check = categoryModel.objects.filter(
+            category=request.POST['roomName']).count()
+        if entries_check > 0:
+            cat_id = categoryModel.objects.filter(
+                category=request.POST['roomName'])[0].catId
+            entries = messagesModel.objects.filter(
+                catId=cat_id).order_by('-last_modified')[:10]
+            r_entries = reversed(entries)
+
+            return JsonResponse(serializers.serialize('json', r_entries), safe=False)
+    return JsonResponse({'check': 'check'})
+
+
+def chatRooms(request):
+    entries_check = categoryModel.objects.all()[:10]
+    return JsonResponse(serializers.serialize('json', entries_check), safe=False)
+
 

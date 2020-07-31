@@ -1,0 +1,78 @@
+{% include "header.html" %} {% load static %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <img src="{% static 'assets/3074320.jpg' %}" style="width: 100%;">
+        </div>
+        <div class="col-md-5 mt-5">
+
+            <!-- Default form login -->
+            <form class="text-center p-5 mt-5" method="POST" action="#">
+                {% csrf_token %} {% for field in form.form.hidden_fields %} {{ field }} {% endfor %} {% for field in form.form.visible_fields %} {{ field }} {% endfor %}
+
+
+
+                <!-- <p class="h4 mb-4">{{name}}</p> -->
+
+                <!-- <div class="d-flex justify-content-around">
+                    <div>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="defaultLoginFormRemember">
+                            <label class="custom-control-label" for="defaultLoginFormRemember">Remember me</label>
+                        </div>
+                    </div>
+                    <div>
+                        <a class="text-default" href="">Forgot password?</a>
+                    </div>
+                </div> -->
+
+                {% if response %} {% if response|stringformat:"s" == "success" %}
+                <div class="alert alert-success" role="alert">
+                    Accont Created Successfully.
+                </div>
+                {% endif %} {% if response|stringformat:"s" == "email"%}
+                <div class="alert alert-danger" role="alert">
+                    Email already exists.
+                </div>
+                {% endif %} {% if response|stringformat:"s" == "password" %}
+                <div class="alert alert-danger" role="alert">
+                    Password does not match.
+                </div>
+                {% endif %} {% endif %}
+
+
+                <!-- Sign in button -->
+                <button class="btn btn-default btn-block my-4" id="submit">Sign in</button>
+
+                <!-- Register -->
+                <p>Not a member?
+                    <a href="" class="text-default">Register</a>
+                </p>
+
+                <!-- Social login -->
+                <p>or sign in with:</p>
+
+                <a href="#" class="mx-2" role="button"><i class="fab fa-facebook-f text-default"></i></a>
+                <a href="#" class="mx-2" role="button"><i class="fab fa-twitter text-default"></i></a>
+                <a href="#" class="mx-2" role="button"><i class="fab fa-linkedin-in text-default"></i></a>
+                <a href="#" class="mx-2" role="button"><i class="fab fa-github text-default"></i></a>
+
+            </form>
+            <!-- Default form login -->
+
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
+
+</body>
+
+<script src="{% static 'js/RCRegister.js' %}"></script>
+
+<script>
+</script>
+
+</html>

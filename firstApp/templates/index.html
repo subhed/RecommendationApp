@@ -1,0 +1,52 @@
+{% include "header.html" %} {% load static %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <img src="{% static 'assets/3074320.jpg' %}" style="width: 100%;">
+        </div>
+        <div class="col-md-5 mt-5">
+
+            <!-- Default form login -->
+            <div class="text-center  mt-5">
+
+
+                <h1 class="font-weight-medium text-default">
+                    Welcome to ReCom.
+                </h1>
+
+                <p class="text-justify mb-3">
+                    Most people go abroad for a trip or some other purpose; it is difficult to search for places or local things away from your home country. This project proposes using web technology to build an online portal for people to ask for recommendations and reviews
+                    regarding various things such as restaurants, parks, movies, books, and many more things.
+                </p>
+
+                <a href="/register" class="text-default">
+                    New to Recom?
+                </a> &nbsp; &middot; &nbsp;
+
+                <a href="/login" class="text-default">
+                    Already have an account.
+                </a>
+                <br>
+                <br>
+                <a href="#" class="mx-2" role="button"><i class="fab fa-facebook-f text-default"></i></a>
+                <a href="#" class="mx-2" role="button"><i class="fab fa-twitter text-default"></i></a>
+                <a href="#" class="mx-2" role="button"><i class="fab fa-linkedin-in text-default"></i></a>
+                <a href="#" class="mx-2" role="button"><i class="fab fa-github text-default"></i></a>
+
+
+            </div>
+            <!-- Default form login -->
+
+        </div>
+    </div>
+
+
+    {% include "footer.html" %}
+
+    </body>
+
+    <script src="{% static 'js/RCLogin.js' %}"></script>
+
+    </html>

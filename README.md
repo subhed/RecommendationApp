@@ -26,6 +26,8 @@ Most people go abroad for a trip or some other purpose; it is difficult to searc
 - Django
 - Python
 - SQLite
+- WebSockets
+- REDIS
 
 > Front-End
 

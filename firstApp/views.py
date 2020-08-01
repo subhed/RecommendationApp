@@ -311,3 +311,14 @@ def user(request, user):
     return render(request, 'user.html', {'name': 'ReCom Home', 'user': user1, 'posts': entries, 'comments': comments, 'category': 'General', 'catList': cat_list})
 
 
+def profile(request):
+    if 'email' not in request.session:
+        return render(request, 'login.html', {'name': 'Login'})
+    session_email = request.session['email']
+    user1 = userModel.objects.filter(email=session_email)
+    user1_pk = userModel.objects.filter(email=session_email)[0].pk
+    entries = postModel.objects.filter(user=user1_pk).order_by('-last_modified')
+    comments = commentModel.objects.all().order_by('-last_modified')
+    cat_list = categoryModel.objects.all()
+    return render(request, 'user.html', {'name': 'ReCom Home', 'user': user1, 'posts': entries, 'comments': comments, 'category': 'General', 'catList': cat_list})
+

@@ -106,6 +106,5 @@ $ python manage.py runserver
 > Contributor
 
 | <a href="http://github.com/subhed" target="_blank">**Subhed Chavan**</a> |
-| :---: |:---:| :---:|
 | <a href="http://github.com/subhed" target="_blank">`github.com/subhed`</a> 
 

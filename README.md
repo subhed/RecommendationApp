@@ -28,6 +28,8 @@ Most people go abroad for a trip or some other purpose; it is difficult to searc
 - SQLite
 - WebSockets
 - REDIS
+- Google API
+- Backend API
 
 > Front-End
 

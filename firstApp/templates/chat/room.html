@@ -59,7 +59,7 @@
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        console.log(data);
+        // console.log(data);
         // document.querySelector('#chat-log').value += (data.userId + ' ' + data.message + '\n');
         $('#chatData').append('<div><span class="text-default font-weight-bold">' + data.userId + ' : </span> ' + data.message + '</div>');
 
@@ -98,7 +98,7 @@
         csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
 
         $.ajax({
-            url: 'http://localhost:8000/getMessage/',
+            url: 'http://35.208.238.2/getMessage/',
             type: 'POST',
             headers: {
                 'X-CSRFToken': csrf_token
@@ -110,7 +110,7 @@
                 var obj = JSON.parse(data);
                 // console.log(obj[0].fields.message);
                 for (var msg in obj) {
-                    console.log(obj[msg]);
+                    // console.log(obj[msg]);
                     // $('#chat-log').val($('#chat-log').val() + "\n" + '' + obj[msg].fields.userName + ': ' + obj[msg].fields.message);
                     $('#chatData').append('<div><span class="text-default font-weight-bold">' + obj[msg].fields.userName + ' :</span> ' + obj[msg].fields.message + '</div>');
 

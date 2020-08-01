@@ -28,11 +28,6 @@ $(document).ready(function() {
                         return "objC"
                     };
 
-                    console.log(objC);
-
-                    // $('#tBody').append(' <tr><td>' + objC.email + '</td><td>' + objC.password + '</td><td>' + objC.message + '</td></tr>');
-
-
                 }
             });
         }

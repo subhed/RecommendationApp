@@ -1,3 +1,4 @@
+var urlAddr = window.location.hostname;
 $(document).ready(function() {
     $("#id_location").removeAttr("required");
     $("#id_image").addClass('custom-file-input1 col-3');
@@ -34,17 +35,10 @@ $(document).ready(function() {
         data.append('user', user);
         data.append('user_name', user_name);
 
-
-
-        console.log("Data");
-        for (var pair of data.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
-
-
+        
         if (content != "") {
             $.ajax({
-                url: 'http://localhost:8000/postCheck/',
+                url: 'http://35.208.238.2/postCheck/',
                 type: 'POST',
                 contentType: 'multipart/form-data',
                 cache: false,
@@ -68,7 +62,7 @@ $(document).ready(function() {
                     }
 
                     if ($("#id_image").val() != '') {
-                        image = '<img src="http://localhost:8000' + data.image + '" style="max-width: 100%; padding: 1em; max-height: 500px;">';
+                        image = '<img src="http://35.208.238.2' + data.image + '" style="max-width: 100%; padding: 1em; max-height: 500px;">';
                     } else {
                         image = '';
                     }
@@ -85,7 +79,7 @@ $(document).ready(function() {
     });
 
 
-    $.getJSON("http://localhost:8000/getCategory/", function(result) {
+    $.getJSON("http://35.208.238.2/getCategory/", function(result) {
 
         var obj = JSON.parse(result);
         for (var cat in obj) {
@@ -133,7 +127,7 @@ $(document).on('click', '.deleteBtn', function() {
     if (r == true) {
         if (id != "") {
             $.ajax({
-                url: 'http://localhost:8000/postDelete/',
+                url: 'http://35.208.238.2/postDelete/',
                 type: 'POST',
                 headers: {
                     'X-CSRFToken': csrf_token
@@ -158,7 +152,7 @@ $(document).on('click', '.deleteBtnCmt', function() {
     if (r == true) {
         if (id != "") {
             $.ajax({
-                url: 'http://localhost:8000/commentDelete/',
+                url: 'http://35.208.238.2/commentDelete/',
                 type: 'POST',
                 headers: {
                     'X-CSRFToken': csrf_token
@@ -187,7 +181,7 @@ $(document).on('click', '.dislike', function() {
 
     if (id != "") {
         $.ajax({
-            url: 'http://localhost:8000/commentDisLike/',
+            url: 'http://35.208.238.2/commentDisLike/',
             type: 'POST',
             headers: {
                 'X-CSRFToken': csrf_token
@@ -214,7 +208,7 @@ $(document).on('click', '.like', function() {
 
     if (id != "") {
         $.ajax({
-            url: 'http://localhost:8000/commentLike/',
+            url: 'http://35.208.238.2/commentLike/',
             type: 'POST',
             headers: {
                 'X-CSRFToken': csrf_token

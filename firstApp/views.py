@@ -32,8 +32,7 @@ def wallPageView(request):
     comments = commentModel.objects.all().order_by('-last_modified')
     cat_list = categoryModel.objects.all()
 
-    print(entries.count())
-    print(comments)
+
     form_param = {}
     form_param['form'] = postForm()
     user1 = userModel.objects.filter(email=session_email)
@@ -44,7 +43,7 @@ def wallPageView_cat(request, category):
     if 'email' not in request.session:
         return render(request, 'login.html', {'name': 'Login'})
 
-    print(category)
+  
 
     if category == 'General':
         return HttpResponseRedirect("/home/")
@@ -61,8 +60,6 @@ def wallPageView_cat(request, category):
     comments = commentModel.objects.all().order_by('-last_modified')
     cat_list = categoryModel.objects.all()
 
-    print(entries)
-    print(comments)
     form_param = {}
     form_param['form'] = postForm()
     user1 = userModel.objects.filter(email=session_email)
@@ -80,7 +77,6 @@ def registerView(request):
         return render(request, 'register.html', {'name': 'Register', 'form': form_param})
 
     if form.is_valid():
-        print(request.POST['email'])
         entryCheck = userModel.objects.filter(
             email=request.POST['email']).count()
 
@@ -109,32 +105,27 @@ def postCheck(request):
     catIdInt = request.POST['category']
     check = 0
     # entries_check = categoryModel.objects.filter(catId=request.POST['category']).count()
-    print(catIdInt)
+   
     try:
         val = int(catIdInt)
     except ValueError:
-        print("That's not an int!")
+        
         check = 1
 
     if check == 1:
         catInstance = categoryModel.objects.create(
             category=request.POST['category'], posts=0)
         catIdInt = catInstance.pk
-        print('Setting')
+       
 
     if not 'image' in request.FILES:
         foo_instance = postModel.objects.create(
             user_name=user1.f_name+' '+user1.l_name, user=user1, post_message=request.POST['post_message'], location=request.POST['location'], category=catIdInt)
     else:
-        print(request.FILES['image'])
         foo_instance = postModel.objects.create(
             user_name=user1.f_name+' '+user1.l_name, user=user1, post_message=request.POST['post_message'], location=request.POST['location'], category=catIdInt, image=request.FILES['image'])
 
-    # if form.is_valid():
-    #     print(request.GET['location'])
-    #     form.save()
-    # else:
-    #     print(form.errors)
+
     image_id = postModel.objects.get(pk=foo_instance.pk)
 
     form_param = {}
@@ -155,10 +146,10 @@ def commentCheck(request):
     user1 = userModel.objects.get(email=request.session['email'])
     post1 = postModel.objects.get(postId=request.GET['post_id'])
 
-    print(request.GET['comment_message'])
+    
     foo_instance = commentModel.objects.create(
         postId=post1, userId=user1, user=user1.f_name+' '+user1.l_name, comment_message=request.GET['comment_message'])
-    print(foo_instance.pk)
+    
     form_param = {}
     form_param['form'] = postForm()
     return JsonResponse({
@@ -169,10 +160,10 @@ def commentCheck(request):
 def postDelete(request):
 
     user1 = userModel.objects.get(email=request.session['email'])
-    print(user1)
+   
 
     if request.method == 'POST':
-        print(request.POST['postId'])
+        
         postModel.objects.filter(pk=request.POST['postId']).delete()
 
     return JsonResponse({})
@@ -181,10 +172,9 @@ def postDelete(request):
 def commentDelete(request):
 
     user1 = userModel.objects.get(email=request.session['email'])
-    print(user1)
-
+    
     if request.method == 'POST':
-        print(request.POST['cmtId'])
+        
         commentModel.objects.filter(pk=request.POST['cmtId']).delete()
 
     return JsonResponse({})
@@ -193,7 +183,7 @@ def commentDelete(request):
 def commentLike(request):
 
     if request.method == 'POST':
-        print(request.POST['cmtId'])
+      
         likes_count = commentModel.objects.get(pk=request.POST['cmtId']).likes
         cmt = commentModel.objects.filter(
             pk=request.POST['cmtId']).update(likes=likes_count+1)
@@ -204,7 +194,7 @@ def commentLike(request):
 def commentDisLike(request):
 
     if request.method == 'POST':
-        print(request.POST['cmtId'])
+      
         likes_count = commentModel.objects.get(
             pk=request.POST['cmtId']).dislike
         cmt = commentModel.objects.filter(
@@ -222,7 +212,7 @@ def loginCheck(request):
         if user == True:
             form_param = {}
             form_param['form'] = postForm()
-            print(user)
+            
             entries = postModel.objects.all().order_by('-last_modified')
             comments = commentModel.objects.all().order_by('-last_modified')
             user1 = userModel.objects.filter(
@@ -261,7 +251,7 @@ def room(request, room_name):
 
 def getMessage(request):
     if request.method == "POST":
-        print(request.POST['roomName'])
+       
         entries_check = categoryModel.objects.filter(
             category=request.POST['roomName']).count()
         if entries_check > 0:
@@ -288,8 +278,7 @@ def search(request, location):
     entries = postModel.objects.filter(Q(location__contains=location) | Q(post_message__contains=location) ).order_by('-last_modified')
     comments = commentModel.objects.all().order_by('-last_modified')
     cat_list = categoryModel.objects.all()
-    print(entries.count())
-    print(comments)
+  
     form_param = {}
     form_param['form'] = postForm()
     user1 = userModel.objects.filter(email=session_email)

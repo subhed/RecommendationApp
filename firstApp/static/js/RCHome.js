@@ -205,6 +205,9 @@ $(document).on('click', '.dislike', function() {
 
 });
 
+
+
+
 $(document).on('click', '.like', function() {
     var id = $(this).attr("id");
     csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
@@ -227,3 +230,16 @@ $(document).on('click', '.like', function() {
     }
 
 });
+
+
+$(document).on('click', '#searchId', function() {
+    var id = $('#search').val();
+    window.location.replace("/search/" + id);
+
+});
+
+document.querySelector('#search').onkeyup = function(e) {
+    if (e.keyCode === 13) { // enter, return
+        document.querySelector('#searchId').click();
+    }
+};

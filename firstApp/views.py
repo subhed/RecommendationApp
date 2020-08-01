@@ -16,6 +16,7 @@ from django.db.models import F
 from django.shortcuts import get_object_or_404
 from .models import categoryModel
 from .models import messagesModel
+from django.db.models import Q
 
 
 def homePageView(request):
@@ -84,9 +85,9 @@ def registerView(request):
             email=request.POST['email']).count()
 
         if request.POST['password'] != request.POST['password2']:
-                form_param = {}
-                form_param['form'] = userForm()
-                return render(request, 'register.html', {'name': 'Register', 'form': form_param, 'response': 'password'})
+            form_param = {}
+            form_param['form'] = userForm()
+            return render(request, 'register.html', {'name': 'Register', 'form': form_param, 'response': 'password'})
         elif entryCheck == 0:
             form.save()
             form_param = {}
@@ -277,5 +278,36 @@ def getMessage(request):
 def chatRooms(request):
     entries_check = categoryModel.objects.all()[:10]
     return JsonResponse(serializers.serialize('json', entries_check), safe=False)
+
+
+def search(request, location):
+    if 'email' not in request.session:
+        return render(request, 'login.html', {'name': 'Login'})
+
+    session_email = request.session['email']
+    entries = postModel.objects.filter(Q(location__contains=location) | Q(post_message__contains=location) ).order_by('-last_modified')
+    comments = commentModel.objects.all().order_by('-last_modified')
+    cat_list = categoryModel.objects.all()
+    print(entries.count())
+    print(comments)
+    form_param = {}
+    form_param['form'] = postForm()
+    user1 = userModel.objects.filter(email=session_email)
+    user_filter = userModel.objects.filter(email__contains=location).count()
+    user_entries = userModel.objects.filter(Q(email__contains=location) | Q(f_name__contains=location) | Q(l_name__contains=location) )
+
+    return render(request, 'search.html', {'name': 'ReCom Home', 'user': user1, 'form': form_param, 'posts': entries, 'comments': comments, 'category': 'General', 'catList': cat_list,'user_entries':user_entries})
+  
+
+def user(request, user):
+    if 'email' not in request.session:
+        return render(request, 'login.html', {'name': 'Login'})
+    session_email = request.session['email']
+    user1 = userModel.objects.filter(email=user)
+    user1_pk = userModel.objects.filter(email=user)[0].pk
+    entries = postModel.objects.filter(user=user1_pk).order_by('-last_modified')
+    comments = commentModel.objects.all().order_by('-last_modified')
+    cat_list = categoryModel.objects.all()
+    return render(request, 'user.html', {'name': 'ReCom Home', 'user': user1, 'posts': entries, 'comments': comments, 'category': 'General', 'catList': cat_list})
 
 

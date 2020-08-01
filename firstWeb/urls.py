@@ -53,5 +53,7 @@ urlpatterns = [
     path('chat/<str:room_name>/', views.room, name='Room'),
     path('getMessage/', views.getMessage, name='Messages'),
     path('getCategory/', views.chatRooms, name='Category'),
+    path('search/<str:location>/', views.search, name='Search'),
+    path('user/<str:user>/', views.user, name='User'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
